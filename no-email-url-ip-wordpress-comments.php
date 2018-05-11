@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {	exit(0);}
 
 // remove email and url field from comments
 function mo_remove_comment_fields($fields) {
-    if(isset($fields['email'])) unset($fields['email']);
+	if(isset($fields['email'])) unset($fields['email']);
 	if(isset($fields['url'])) unset($fields['url']);
-    return $fields;
+	return $fields;
 }
 add_filter('comment_form_default_fields', 'mo_remove_comment_fields');
 
