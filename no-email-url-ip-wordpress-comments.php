@@ -3,7 +3,7 @@
  * Plugin Name: No Email, IP and URL for Wordpress Comments
  * Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * GitHub Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
- * Description: A very simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. No settings page needed at this moment. For details/troubleshooting please contact me at https://moise.pro/contact/
+ * Description: A very simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. No settings page needed at this moment.
  * Version: 0.1.0
  * Author: Alex Moise
  * Author URI: https://moise.pro
