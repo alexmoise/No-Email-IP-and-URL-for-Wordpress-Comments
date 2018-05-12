@@ -64,7 +64,7 @@ function moneiuwc_register_settings() {
 add_action( 'admin_notices', 'moneiuwc_first_settings_notice' );
 function moneiuwc_first_settings_notice() {
 	if ( get_option ( 'moneiuwc_display_first_settings_notice' ) != 1 )  {
-		echo "<div class=\"notice-info notice\"><p><strong>No Email, IP and URL for Wordpress Comments</strong> plugin is installed and activated. Now go to <a href=\"".get_site_url()."/wp-admin/options-general.php?page=moneiuwc-options\">Comments settings</a> page and select a few <strong>options</strong> of your choice in order to remove comments features you wish. This notice will be automatically dismissed after first saving the <strong>No Email, IP and URL for Wordpress Comments</strong> plugin options.</p></div>";
+		echo "<div class=\"notice-info notice\"><p><strong>No Email, IP and URL for Wordpress Comments</strong> plugin is installed and activated. Now go to <a href=\"".get_site_url()."/wp-admin/options-general.php?page=moneiuwc-options\">Comments settings</a> page and <em><strong>enable the options</strong></em> of your choice in order to remove comments features you wish. This notice will be automatically dismissed after first saving the <strong>No Email, IP and URL for Wordpress Comments</strong> plugin options.</p></div>";
 	}
 }
 
