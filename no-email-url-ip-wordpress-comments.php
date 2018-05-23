@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * GitHub Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * Description: A quite simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. Also disables comment system cookie and empties comment notes text. Now including a settings page to selectively disable or enable any of these Wordpress Comments features as needed.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -13,8 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {	exit(0);}
 
 // remove email and url field from comments
 function mo_remove_comment_fields($fields) {
-	if ( get_option( 'moneiuwc_remove_email' ) ) 	{ 	if(isset($fields['email']))		{ unset($fields['email']); 	} }
-	if ( get_option( 'moneiuwc_remove_website' ) ) 	{ 	if(isset($fields['url'])) 		{ unset($fields['url']); 	} }
+	if ( get_option( 'moneiuwc_remove_email' ) ) 	{ 	if(isset($fields['email']))		{ unset($fields['email']); 	 } }
+	if ( get_option( 'moneiuwc_remove_website' ) ) 	{ 	if(isset($fields['url'])) 		{ unset($fields['url']); 	 } }
+	if ( get_option( 'moneiuwc_disable_cookie' ) ) 	{ 	if(isset($fields['cookies'])) 	{ unset($fields['cookies']); } }
 	return $fields;
 }
 add_filter('comment_form_default_fields', 'mo_remove_comment_fields');
@@ -35,7 +36,7 @@ add_filter( 'pre_comment_user_ip', 'mo_dont_store_commenter_ip' );
 // disable comments cookie
 add_action('init', 'mo_disable_comment_cookie');
 function mo_disable_comment_cookie() {
-	if ( get_option( 'moneiuwc_remove_cookie' ) ) { remove_action( 'set_comment_cookies', 'wp_set_comment_cookies' ); }
+	if ( get_option( 'moneiuwc_disable_cookie' ) ) { remove_action( 'set_comment_cookies', 'wp_set_comment_cookies' ); }
 }
 
 // === Add plugin's admin options ===
@@ -55,7 +56,7 @@ function moneiuwc_register_settings() {
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_remove_website' );
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_empty_notes' );
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_discard_ip' );
-	register_setting( 'moneiuwc-settings-group', 'moneiuwc_remove_cookie' );
+	register_setting( 'moneiuwc-settings-group', 'moneiuwc_disable_cookie' );
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_display_first_settings_notice' );
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_delete_options_uninstall' );
 }
@@ -105,14 +106,14 @@ function moneiuwc_options_management() {
 			<th scope="row">Don't collect IP addresses: </th>
 			<td>
 				<input name="moneiuwc_discard_ip" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_discard_ip' ) ); ?> />
-				<span>(don't collect IPs from now on, but old IP collected will stay in your comments list)</span>
+				<span>(Don't collect IPs from now on, but old IP collected will stay in your comments list)</span>
 			</td>
 		</tr>
 		<tr valign="top">
-			<th scope="row">Remove cookie: </th>
+			<th scope="row">Disable cookie: </th>
 			<td>
-				<input name="moneiuwc_remove_cookie" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_remove_cookie' ) ); ?> />
-				<span>(don't set new cookies from now on, these already set will stay in the browsers of visitors who already commented)</span>
+				<input name="moneiuwc_disable_cookie" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_disable_cookie' ) ); ?> />
+				<span>(Don't set new cookies from now on, these already set will stay in the browsers of visitors who already commented. Also removes the checkbox option to save the cookie as it's not needed.)</span>
 			</td>
 		</tr>
 		<tr valign="top">
