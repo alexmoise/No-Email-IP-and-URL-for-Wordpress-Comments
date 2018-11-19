@@ -4,12 +4,25 @@
  * Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * GitHub Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * Description: A quite simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. Also disables comment system cookie and empties comment notes text. Now including a settings page to selectively disable or enable any of these Wordpress Comments features as needed.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
 
 if ( ! defined( 'ABSPATH' ) ) {	exit(0);}
+
+// automatically disable and enable the "Comment author must fill out name and email" option depending on Remove Email field option with which is not compatible 
+if ( isset( $_GET['settings-updated'] ) ) { add_action( 'admin_notices', 'mo_deactivate_require_name_email' ); }
+function mo_deactivate_require_name_email() {
+	if ( get_option ( 'moneiuwc_remove_email' ) == 1 )  {
+		update_option( 'require_name_email', '0' );
+		echo '<div class="notice-info notice" style="margin-left: 0px;"><p>The <strong>Comment author must fill out name and email</strong> option has been <strong>disabled</strong> in the <a href="'.get_site_url().'/wp-admin/options-discussion.php">Comments settings</a> page since it is not compatible with <strong>Remove Email field</strong>.</p></div>';
+	}
+	if ( get_option ( 'moneiuwc_remove_email' ) == 0 )  {
+		update_option( 'require_name_email', '1' );
+		echo '<div class="notice-info notice" style="margin-left: 0px;"><p>The <strong>Comment author must fill out name and email</strong> option has been <strong>enabled</strong> in the <a href="'.get_site_url().'/wp-admin/options-discussion.php">Comments settings</a> page since the <strong>Remove Email field</strong> is not active anymore.</p></div>';
+	}
+}
 
 // remove email and url field from comments
 function mo_remove_comment_fields($fields) {
@@ -80,7 +93,7 @@ function moneiuwc_options_management() {
     <?php do_settings_sections( 'moneiuwc-settings-group' ); ?>
 
 	<h2><strong>Please read below and choose options accordingly:</strong></h2>
-	<p>Please keep in mind that comments behaviour is also affected by the settings in <a href="<?php echo get_site_url(); ?>/wp-admin/options-discussion.php">Discussion</a> admin page. <br>MOST IMPORTANT thing to remember is that if the option "Comment author must fill out name and email" is set and the Email field is disabled below, then visitors can't submit comments AT ALL!</p>
+	<p>Please keep in mind that comments behaviour is also affected by the settings in <a href="<?php echo get_site_url(); ?>/wp-admin/options-discussion.php">Discussion</a> admin page. <br><strong>MOST IMPORTANT thing to remember</strong> is that the option <strong>"Comment author must fill out name and email"</strong> is not compatible with <strong>"Remove Email field"</strong> option below, so setting the <strong>"Remove Email field"</strong> option will cause an automatic change of the <strong>"Comment author must fill out name and email"</strong>! <br>Details about how it's changed are shown in an admin notice above at each change (it is basically set to "disabled" when <strong>"Remove Email field"</strong> is "enabled" or the other way around)</p>
 	
 	<input name="moneiuwc_display_first_settings_notice" type="hidden" value="1" <?php echo esc_attr( get_option('moneiuwc_display_first_settings_notice', '1') ); ?> />
 	
@@ -89,7 +102,7 @@ function moneiuwc_options_management() {
 			<th scope="row">Remove Email field: </th>
 			<td> 
 				<input name="moneiuwc_remove_email" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_remove_email' ) ); ?> />
-				<span>(Beware that if this is checked you would need to uncheck "Comment author must fill out name and email" in <a href="<?php echo get_site_url(); ?>/wp-admin/options-discussion.php">Discussion</a> admin page)</span>
+				<span>(Beware that if this is <strong><?php if ( get_option ( 'moneiuwc_remove_email' ) == 1 )  {echo 'un';} ?>checked</strong> it will also <strong><?php if ( get_option ( 'moneiuwc_remove_email' ) == 0 )  {echo 'de';} ?>activate</strong> "Comment author must fill out name and email" in <a href="<?php echo get_site_url(); ?>/wp-admin/options-discussion.php">Discussion</a> admin page)</span>
 			</td>
 		</tr>
 		<tr valign="top">
