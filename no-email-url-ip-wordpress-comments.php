@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * GitHub Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * Description: A quite simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. Also disables comment system cookie and empties comment notes text. Now including a settings page to selectively disable or enable any of these Wordpress Comments features as needed.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -111,8 +111,7 @@ function moneiuwc_options_management() {
 		</tr>
 		<tr valign="top">
 			<th scope="row">Empty (remove) notes text: </th>
-			<td>
-				<input name="moneiuwc_empty_notes" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_empty_notes' ) ); ?> />
+			<td> <input name="moneiuwc_empty_notes" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_empty_notes' ) ); ?> />
 			</td>
 		</tr>
 		<tr valign="top">

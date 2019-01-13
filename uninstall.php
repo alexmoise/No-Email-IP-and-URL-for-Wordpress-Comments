@@ -1,7 +1,7 @@
 <?php
 /**
  * Uninstall of the No Email, IP and URL for Wordpress Comments plugin.
- * Version: 1.0.4
+ * Version: 1.0.5
  */
 if ( ! defined( 'ABSPATH' ) ) 			{exit(0);}
 if ( ! defined('WP_UNINSTALL_PLUGIN')) 	{die;}
@@ -12,7 +12,7 @@ if ( get_option( 'moneiuwc_delete_options_uninstall' ) ) {
 		$moneiuwc_option_remove_website							= 'moneiuwc_remove_website';
 		$moneiuwc_option_remove_empty_notes						= 'moneiuwc_empty_notes';
 		$moneiuwc_option_remove_discard_ip						= 'moneiuwc_discard_ip';
-		$moneiuwc_option_remove_remove_cookie					= 'moneiuwc_remove_cookie';
+		$moneiuwc_option_remove_remove_cookie					= 'moneiuwc_disable_cookie';
 		$moneiuwc_option_remove_display_first_settings_notice	= 'moneiuwc_display_first_settings_notice';
 		$moneiuwc_option_remove_delete_options_uninstall		= 'moneiuwc_delete_options_uninstall';
 	// removing the options ..
