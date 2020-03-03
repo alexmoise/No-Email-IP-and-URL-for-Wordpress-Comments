@@ -3,8 +3,8 @@
  * Plugin Name: No Email, IP and URL for Wordpress Comments
  * Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * GitHub Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
- * Description: A quite simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. Also disables comment system cookie and empties comment notes text. Now including a settings page to selectively disable or enable any of these Wordpress Comments features as needed.
- * Version: 1.0.5
+ * Description: A pretty simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. Also disables comment system cookie and empties comment notes text. Includes a settings page to selectively disable or enable any of these Wordpress Comments features as needed. Now it also removes Email field for WooCommerce reviews if the "Remove Email field" option is set.
+ * Version: 1.0.6
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -32,6 +32,23 @@ function mo_remove_comment_fields($fields) {
 	return $fields;
 }
 add_filter('comment_form_default_fields', 'mo_remove_comment_fields');
+
+// also remove email field for woocommerce
+add_filter( 'comment_form_fields' , 'mo_remove_reviews_fields', 9 );
+function mo_remove_reviews_fields( $fields ) {
+	if ( class_exists( 'woocommerce' ) ) {
+		if ( get_option( 'moneiuwc_remove_email' ) ) 	{ 	if(isset($fields['email']))		{ unset($fields['email']); 	 } }
+		return $fields;
+	}
+}
+
+// add a bit of CSS to fix the Submit button in WooCommerce reviews
+add_action( 'wp_enqueue_scripts', 'mo_adding_styles', 9999999 );
+function mo_adding_styles() {
+	if ( class_exists( 'woocommerce' ) ) {
+		echo '<style>div#reviews p.form-submit { clear: both; }</style>';
+	}
+}
 
 // empty comment form notes
 function mo_empty_comment_form_notes($defaults){
