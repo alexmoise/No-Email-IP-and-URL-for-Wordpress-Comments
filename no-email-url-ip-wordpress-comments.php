@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * GitHub Plugin URI: https://github.com/alexmoise/No-Email-IP-and-URL-for-Wordpress-Comments
  * Description: A pretty simple plugin to remove Email and Website fields from comments area and also stop collecting the commenter's IP address. Also disables comment system cookie and empties comment notes text. Includes a settings page to selectively disable or enable any of these Wordpress Comments features as needed. Now it also removes Email field for WooCommerce reviews if the "Remove Email field" option is set.
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -50,6 +50,15 @@ function mo_adding_styles() {
 	}
 }
 
+// Require Name field if set by the option
+add_action( 'wp_footer', 'mo_make_name_required' );
+function mo_make_name_required() {
+	if ( get_option( 'moneiuwc_require_name' ) ) {
+		echo "<script>jQuery('form.comment-form input#author').prop('required',true); jQuery('label[for=author]').append('<span class=\"required\">&nbsp;*</span>');</script>"; // not on any theme, reasearch later
+		
+	}
+}
+
 // empty comment form notes
 function mo_empty_comment_form_notes($defaults){
 	if ( get_option( 'moneiuwc_empty_notes' ) ) { $defaults['comment_notes_before'] = ''; }
@@ -83,6 +92,7 @@ function moneiuwc_create_menu() {
 // Register its settings
 function moneiuwc_register_settings() {
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_remove_email' );
+	register_setting( 'moneiuwc-settings-group', 'moneiuwc_require_name' );
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_remove_website' );
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_empty_notes' );
 	register_setting( 'moneiuwc-settings-group', 'moneiuwc_discard_ip' );
@@ -120,6 +130,13 @@ function moneiuwc_options_management() {
 			<td> 
 				<input name="moneiuwc_remove_email" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_remove_email' ) ); ?> />
 				<span>(Beware that if this is <strong><?php if ( get_option ( 'moneiuwc_remove_email' ) == 1 )  {echo 'un';} ?>checked</strong> it will also <strong><?php if ( get_option ( 'moneiuwc_remove_email' ) == 0 )  {echo 'de';} ?>activate</strong> "Comment author must fill out name and email" in <a href="<?php echo get_site_url(); ?>/wp-admin/options-discussion.php">Discussion</a> admin page)</span>
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">Make Name field required: <span style="font-size: 12px; display: block; color: red;">NOT ANY THEME SUPPORTS THIS!</span></th>
+			<td> 
+				<input name="moneiuwc_require_name" type="checkbox" value="1" <?php checked( '1', get_option( 'moneiuwc_require_name' ) ); ?> />
+				<span>(Just adds "required" to name field using JS; no backend checks though, so a visitor can write anything as name, including "Anonymous")</span>
 			</td>
 		</tr>
 		<tr valign="top">
